@@ -137,6 +137,7 @@ public class ImagePanel extends JPanel{
 				double area = Imgproc.contourArea(contours.get(idx));
 				//System.out.println(area);
 				areas.add(area);
+				//blah!!!!
 			}
 		}
 		 
