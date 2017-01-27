@@ -14,7 +14,8 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
 		
-		JFrame frame = new JFrame();		
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.add(new ImagePanel(), BorderLayout.CENTER);
 		frame.setSize(480, 600);
 		
