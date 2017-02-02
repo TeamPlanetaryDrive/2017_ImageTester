@@ -21,8 +21,10 @@ public class ImagePanel extends JPanel{
 	
 	public ImagePanel() {
 		try {
-	    	   img = ImageIO.read(new File("src/1ftH2ftD0Angle0Brightness.jpg"));
-	    	   frame = Imgcodecs.imread("src/1ftH2ftD0Angle0Brightness.jpg");
+			//src/LED Boiler/1ftH10ftD1Angle0Brightness.jpg
+	    	   img = ImageIO.read(new File("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg"));
+	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg");
+	    	   System.out.println(frame.width());
 //	          
 //	    	   img = ImageIO.read(new File("src/squares-ib8.jpg"));
 //	    	   frame = Imgcodecs.imread("src/squares-ib8.jpg");
@@ -55,7 +57,7 @@ public class ImagePanel extends JPanel{
 		//110 70  80
 		//220 100 100
 		//Core.inRange(hsvImage, new Scalar(20, 10, 6), new Scalar(180, 84, 25), mask);//now source is a mask
-		Core.inRange(hsvImage, new Scalar(140 / 2, 255*86/100, 255*15/100), new Scalar(90, 255, 255*50/100), mask);
+		Core.inRange(hsvImage, new Scalar(140 / 2, 255*86/100, 255*35/100), new Scalar(90, 255, 255*50/100), mask);
 		
 		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));//24, 24
 		Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(1, 1));//12, 12
@@ -74,10 +76,11 @@ public class ImagePanel extends JPanel{
 		List<Double> areas = new ArrayList<>();
 		
 		//Variables for distance calculation
-		double Tin = 0.833;
-		double Tpix = 78;//width of tape from image
-		int FOVpix = 480;
-		double theta = 1;
+		double Tin = (2.0/12);
+		System.out.println(Tin);
+		double Tpix = 78.0;//width of tape from image
+		double FOVpix = 320.0;
+		double theta = 0.47;
 		
 		double dist; //in inches
 		
@@ -96,7 +99,24 @@ public class ImagePanel extends JPanel{
 				//Next: height and width
 				//rects.get(idx).height          Height
 				//rects.get(idx).width           Width
-				System.out.println(rects.get(idx));
+				
+				
+				
+				
+				
+				double f = 1.94;
+				
+				double d = f * Tin * 640 / (rects.get(idx).width);
+				//System.out.println(d);
+				
+				double ratio;
+				ratio = 1.0*(rects.get(idx).width/ 640.0);
+				d = (91.43 * (ratio)) + 3;
+				System.out.println(d);
+				//f = 156
+				
+				//d = ((21/12)*f)/rects.get(idx).width;
+				
 				// 57/640 = x/480
 				//Camera FOVs
 				//Axis206          640x480
@@ -128,11 +148,12 @@ public class ImagePanel extends JPanel{
 				//	Do it for both rectangles and average the distances
 				//	8 ft away? = 96 inches
 				
-				Tpix = rects.get(idx).height;
+				Tpix = rects.get(idx).width/2;
 				
-				dist = (Tin * FOVpix) / (2*Tpix*Math.tan(theta));
-				dist = dist * Math.cos(0.5);
-				System.out.println(dist);
+				//dist = (Tin * FOVpix) / (2*Tpix*Math.tan(theta));
+				dist = Tin / (Math.tan(0.47));
+				//dist = dist * Math.cos(theta/2);
+				//System.out.println(dist);
 				
 				double area = Imgproc.contourArea(contours.get(idx));
 				//System.out.println(area);
@@ -144,7 +165,7 @@ public class ImagePanel extends JPanel{
 		Mat disp = new Mat();
 		
 		//System.out.println(mask.channels());
-		
+		//More BLAHSHSOIOIWDHOWAsl
 		
 		Imgproc.cvtColor(hsvImage, disp, Imgproc.COLOR_HSV2BGR);
 		
