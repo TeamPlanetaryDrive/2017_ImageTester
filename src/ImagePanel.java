@@ -22,8 +22,8 @@ public class ImagePanel extends JPanel{
 	public ImagePanel() {
 		try {
 			//src/LED Boiler/1ftH10ftD1Angle0Brightness.jpg
-	    	   img = ImageIO.read(new File("src/LED Peg/1ftH5ftD0Angle0Brightness.jpg"));
-	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH5ftD0Angle0Brightness.jpg");
+	    	   img = ImageIO.read(new File("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg"));
+	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg");
 	    	   System.out.println(frame.width());
 //	          
 //	    	   img = ImageIO.read(new File("src/squares-ib8.jpg"));
@@ -51,13 +51,13 @@ public class ImagePanel extends JPanel{
 		Mat morphOutput = new Mat();
 		
 		//remove noise
-		Imgproc.blur(frame, blurredImage, new Size(15, 15));
+		Imgproc.blur(frame, blurredImage, new Size(7, 7));
 		Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 		
 		//110 70  80
 		//220 100 100
 		//Core.inRange(hsvImage, new Scalar(20, 10, 6), new Scalar(180, 84, 25), mask);//now source is a mask
-		Core.inRange(hsvImage, new Scalar(140 / 2, 255*86/100, 255*40/100), new Scalar(90, 255, 255*50/100), mask);
+		Core.inRange(hsvImage, new Scalar(140 / 2, 255*86/100, 255*40/100), new Scalar(90, 255, 255*100/100), mask);
 		
 		Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));//24, 24
 		Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(1, 1));//12, 12
@@ -80,7 +80,7 @@ public class ImagePanel extends JPanel{
 		//System.out.println(Tin);
 		double Tpix = 78.0;//width of tape from image
 		double FOVpix = 320.0;
-		double theta = 0.6;
+		double theta = 0.38182;
 		double tapeHeight = 4;
 		
 		double dist; //in inches
@@ -93,6 +93,8 @@ public class ImagePanel extends JPanel{
 		if (hierarchy.size().height > 0 && hierarchy.size().width > 0) {
 			// for each contour, display it in blue
 			for (int idx = 0; idx < contours.size(); idx++) {
+				//if (hierarchy == 0){
+				
 				Imgproc.drawContours(hsvImage, contours, idx, new Scalar(250, 250, 250));
 				
 				rects.add(Imgproc.boundingRect(contours.get(idx)));
@@ -152,7 +154,7 @@ public class ImagePanel extends JPanel{
 				//	Do it for both rectangles and average the distances
 				//	8 ft away? = 96 inches
 				
-				//Tpix = rects.get(idx).width/2;
+				Tpix = rects.get(idx).width/2;
 				
 				dist = (Tin * FOVpix) / (2.0*Tpix*Math.tan(theta));
 				
@@ -167,7 +169,7 @@ public class ImagePanel extends JPanel{
 				//System.out.println(area);
 				//asdf
 				areas.add(area);
-				
+				//}
 			}
 		}
 		 
