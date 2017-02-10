@@ -80,7 +80,7 @@ public class ImagePanel extends JPanel{
 		//System.out.println(Tin);
 		double Tpix = 78.0;//width of tape from image
 		double FOVpix = 320.0;
-		double theta = 0.4;
+		double theta = 0.6;
 		double tapeHeight = 4;
 		
 		double dist; //in inches
@@ -165,6 +165,7 @@ public class ImagePanel extends JPanel{
 				
 				double area = Imgproc.contourArea(contours.get(idx));
 				//System.out.println(area);
+				//asdf
 				areas.add(area);
 				
 			}
