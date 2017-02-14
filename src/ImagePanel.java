@@ -4,6 +4,7 @@ import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -22,9 +23,8 @@ public class ImagePanel extends JPanel{
 	public ImagePanel() {
 		try {
 			//src/LED Boiler/1ftH10ftD1Angle0Brightness.jpg
-	    	   img = ImageIO.read(new File("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg"));
-	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg");
-	    	   System.out.println(frame.width());
+	    	   img = ImageIO.read(new File("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg"));
+	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg");
 //	          
 //	    	   img = ImageIO.read(new File("src/squares-ib8.jpg"));
 //	    	   frame = Imgcodecs.imread("src/squares-ib8.jpg");
@@ -70,6 +70,7 @@ public class ImagePanel extends JPanel{
 
 		List<MatOfPoint> contours = new ArrayList<>();
 		List<Rect> rects = new ArrayList<>();
+		List<Integer> rectWidths = new ArrayList<>();
 		Mat hierarchy = new Mat();
 		
 		//List of contour areas
@@ -80,10 +81,12 @@ public class ImagePanel extends JPanel{
 		//System.out.println(Tin);
 		double Tpix = 78.0;//width of tape from image
 		double FOVpix = 320.0;
-		double theta = 0.38182;
+		double theta = 0.34582;
 		double tapeHeight = 4;
 		
 		double dist; //in inches
+		double totalDist =0;
+		double avgX = 0;
 		
 		Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 		
@@ -98,6 +101,7 @@ public class ImagePanel extends JPanel{
 				Imgproc.drawContours(hsvImage, contours, idx, new Scalar(250, 250, 250));
 				
 				rects.add(Imgproc.boundingRect(contours.get(idx)));
+				rectWidths.add(rects.get(idx).width);
 				//System.out.println(rects.get(idx));
 				
 				Imgproc.rectangle(hsvImage, rects.get(idx).tl(), rects.get(idx).br(), new Scalar(250, 250, 250));
@@ -162,17 +166,53 @@ public class ImagePanel extends JPanel{
 				//distrue = Math.sqrt((tapeHeight*tapeHeight) - (dist*dist));
 				//dist = Tin / (Math.tan(0.47));
 				//dist = dist * Math.cos(theta/2);
-				System.out.println(dist);
+				//System.out.println(dist);
 				//System.out.println(distrue);
 				
 				double area = Imgproc.contourArea(contours.get(idx));
 				//System.out.println(area);
 				//asdf
 				areas.add(area);
+				
+				
+				
+				totalDist += dist;
+				avgX += ((rects.get(idx).tl().x)+(rects.get(idx).width/2));
 				//}
 			}
 		}
-		 
+		totalDist = totalDist/2.0;
+		
+		//Initial widths
+		//for(int counter: rectWidths){
+			//System.out.println(counter);
+		//}
+		
+		//Sorting
+		Collections.sort(rectWidths);
+		
+		//After Sorting
+		for(int count: rectWidths){
+			System.out.println(count);
+		}
+		
+		//lowest difference
+		int lowDif = 900;
+		int lowDifIdx = 0;
+		int curDif = 0;
+		for(int ct = 0; ct < rectWidths.size()-1;ct++){
+			curDif = rectWidths.get(ct+1) - rectWidths.get(ct);
+			if(curDif < lowDif){
+				lowDif = curDif;
+				lowDifIdx = ct;
+				System.out.println("New lowest difference of " + curDif);
+			}
+			System.out.println(curDif);
+		}
+		
+		System.out.println("The two closest widths are " + rectWidths.get(lowDifIdx) + " and " + rectWidths.get(lowDifIdx+1));
+		System.out.println("These are at indicies " + lowDifIdx + " and " + (lowDifIdx+1));
+		
 		Mat disp = new Mat();
 		
 		//System.out.println(mask.channels());
