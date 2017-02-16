@@ -87,6 +87,7 @@ public class ImagePanel extends JPanel{
 		double dist; //in inches
 		double totalDist =0;
 		double avgX = 0;
+		double totalAvgX = 0;
 		
 		Imgproc.findContours(morphOutput, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
 		
@@ -177,16 +178,33 @@ public class ImagePanel extends JPanel{
 				
 				
 				totalDist += dist;
-				avgX += ((rects.get(idx).tl().x)+(rects.get(idx).width/2));
+				avgX = ((rects.get(idx).tl().x)+(rects.get(idx).width/2));
+				totalAvgX += avgX;
+				System.out.println(avgX);
 				//}
 			}
 		}
+		
+		
+		
+		System.out.println(rects.size());
+		totalAvgX = totalAvgX/(rects.size());
+		System.out.println(totalAvgX);
 		totalDist = totalDist/2.0;
 		
+		double legOne = totalAvgX;
+		double legTwo = 320.0 - (totalAvgX);
+		
+		
+		
+		double finalTheta = Math.atan2(legTwo, legOne);
+		System.out.println(Math.toDegrees(finalTheta));
+		
+		/*
 		//Initial widths
-		//for(int counter: rectWidths){
-			//System.out.println(counter);
-		//}
+		for(int counter: rectWidths){
+			System.out.println(counter);
+		}
 		
 		//Sorting
 		Collections.sort(rectWidths);
@@ -212,8 +230,10 @@ public class ImagePanel extends JPanel{
 		
 		System.out.println("The two closest widths are " + rectWidths.get(lowDifIdx) + " and " + rectWidths.get(lowDifIdx+1));
 		System.out.println("These are at indicies " + lowDifIdx + " and " + (lowDifIdx+1));
-		
+		*/
 		Mat disp = new Mat();
+		
+		
 		
 		//System.out.println(mask.channels());
 		//More BLAHSHSOIOIWDHOWAsl
@@ -222,8 +242,9 @@ public class ImagePanel extends JPanel{
 		
 		
 		BufferedImage newImg = new BufferedImage(disp.cols(), disp.rows(), BufferedImage.TYPE_3BYTE_BGR);
+		
 		 
-		 
+		
 		byte[] data = ((DataBufferByte) newImg.getRaster().getDataBuffer()).getData();
 		disp.get(0, 0, data);
 		
