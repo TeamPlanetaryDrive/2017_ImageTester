@@ -100,7 +100,7 @@ public class ImagePanel extends JPanel{
 				//if (hierarchy == 0){
 				
 				Imgproc.drawContours(hsvImage, contours, idx, new Scalar(250, idx*250, 250));
-				
+				//asdf
 				
 				rects.add(Imgproc.boundingRect(contours.get(idx)));
 				rectWidths.add(rects.get(idx).width);
