@@ -18,13 +18,13 @@ public class ImagePanel extends JPanel{
 
 	private BufferedImage img;
 	Mat frame;
-	
+	private volatile int deltaWidth;
 	
 	public ImagePanel() {
 		try {
 			//src/LED Boiler/1ftH10ftD1Angle0Brightness.jpg
-	    	   img = ImageIO.read(new File("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg"));
-	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH2ftD0Angle0Brightness.jpg");
+	    	   img = ImageIO.read(new File("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg"));
+	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg");
 //	          
 //	    	   img = ImageIO.read(new File("src/squares-ib8.jpg"));
 //	    	   frame = Imgcodecs.imread("src/squares-ib8.jpg");
@@ -99,7 +99,8 @@ public class ImagePanel extends JPanel{
 			for (int idx = 0; idx < contours.size(); idx++) {
 				//if (hierarchy == 0){
 				
-				Imgproc.drawContours(hsvImage, contours, idx, new Scalar(250, 250, 250));
+				Imgproc.drawContours(hsvImage, contours, idx, new Scalar(250, idx*250, 250));
+				
 				
 				rects.add(Imgproc.boundingRect(contours.get(idx)));
 				rectWidths.add(rects.get(idx).width);
@@ -174,17 +175,26 @@ public class ImagePanel extends JPanel{
 				//System.out.println(area);
 				//asdf
 				areas.add(area);
-				
+				System.out.println("Area: " +area);
 				
 				
 				totalDist += dist;
 				avgX = ((rects.get(idx).tl().x)+(rects.get(idx).width/2));
 				totalAvgX += avgX;
 				System.out.println(avgX);
+				
+				
 				//}
 			}
 		}
-		
+		if(rects.get(0).tl().x>rects.get(1).tl().x){
+			deltaWidth = rectWidths.get(0)-rectWidths.get(1);
+			System.out.println("Left:" +rectWidths.get(0) + "// Right:" + rectWidths.get(1));
+		}else{}
+			//deltaWidth = rectWidths.get(1)-rectWidths.get(0);
+			//System.out.println("Left:" +rectWidths.get(1) + "// Right:" + rectWidths.get(0));
+		//}
+		System.out.println(deltaWidth);
 		
 		
 		System.out.println(rects.size());
