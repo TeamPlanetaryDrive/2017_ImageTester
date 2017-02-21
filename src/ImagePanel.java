@@ -23,8 +23,8 @@ public class ImagePanel extends JPanel{
 	public ImagePanel() {
 		try {
 			//src/LED Boiler/1ftH10ftD1Angle0Brightness.jpg
-	    	   img = ImageIO.read(new File("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg"));
-	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH4ftD0Angle0Brightness.jpg");
+	    	   img = ImageIO.read(new File("src/LED Peg/1ftH5ftD0Angle0Brightness.jpg"));
+	    	   frame = Imgcodecs.imread("src/LED Peg/1ftH5ftD0Angle0Brightness.jpg");
 //	          
 //	    	   img = ImageIO.read(new File("src/squares-ib8.jpg"));
 //	    	   frame = Imgcodecs.imread("src/squares-ib8.jpg");
@@ -190,7 +190,7 @@ public class ImagePanel extends JPanel{
 		if(rects.get(0).tl().x>rects.get(1).tl().x){
 			deltaWidth = rectWidths.get(0)-rectWidths.get(1);
 			System.out.println("Left:" +rectWidths.get(0) + "// Right:" + rectWidths.get(1));
-		}else{}
+		}//else{}
 			//deltaWidth = rectWidths.get(1)-rectWidths.get(0);
 			//System.out.println("Left:" +rectWidths.get(1) + "// Right:" + rectWidths.get(0));
 		//}
@@ -206,9 +206,10 @@ public class ImagePanel extends JPanel{
 		double legTwo = 320.0 - (totalAvgX);
 		
 		
-		
+		//Final angle the robot needs to turn
 		double finalTheta = Math.atan2(legTwo, legOne);
-		System.out.println(Math.toDegrees(finalTheta));
+		System.out.println("Degrees: " + Math.toDegrees(finalTheta));
+		System.out.println("Radians: " + (finalTheta));
 		
 		/*
 		//Initial widths

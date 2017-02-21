@@ -17,7 +17,7 @@ public class Main {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.add(new ImagePanel(), BorderLayout.CENTER);
-		frame.setSize(480, 600);
+		frame.setSize(640, 480);
 		
 		frame.setVisible(true);
 		
